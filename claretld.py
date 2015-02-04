@@ -114,8 +114,14 @@ def getclosestmodel(Teff, logg, filt, method='F'):
         closest = getcloseindices('logg', logg) * \
                   getcloseindices('Teff', Teff) * \
                   (d['Met'] == method.upper()) * (d['Filt'] == filt) 
+        
+        # If only one data row is closest: 
         if np.sum(closest) == 1:
             return np.arange(len(closest))[closest][0]
+        
+        # If two data rows are equally close, return both:
+        elif np.sum(closest) == 2:
+            return np.arange(len(closest))[closest]
         else:
             return []
 
@@ -145,7 +151,13 @@ def linear(*args):
         I(mu)/I(1) = 1 - u*(1 - mu)
     '''
     closestmodel = getclosestmodel(*args)
-    return d['u'][closestmodel]
+
+    # If two grid points are equally close, take the mean of the ld-parameters
+    if type(closestmodel) == np.ndarray:
+        return np.mean(d['u'][closestmodel])
+    # If one grid point is the closest: 
+    else: 
+        return d['u'][closestmodel]
 
 def quad(*args):
     '''
@@ -173,8 +185,14 @@ def quad(*args):
         I(mu)/I(1) = 1 - a*(1 - mu) - b*(1 - mu)**2
     '''
     closestmodel = getclosestmodel(*args)
-    return d['a'][closestmodel], d['b'][closestmodel]
 
+    # If two grid points are equally close, take the mean of the ld-parameters
+    if type(closestmodel) == np.ndarray:
+        return np.mean(d['a'][closestmodel]), np.mean(d['b'][closestmodel])
+    # If one grid point is the closest: 
+    else: 
+        return d['a'][closestmodel], d['b'][closestmodel]
+    
 def logarithmic(*args):
     '''
     Logarithmic limb-darkening law.
@@ -201,8 +219,14 @@ def logarithmic(*args):
         I(mu)/I(1) = 1 - e*(1 - mu) - f*mu*ln(mu)
     '''
     closestmodel = getclosestmodel(*args)
-    return d['e'][closestmodel], d['f'][closestmodel]
-    
+
+    # If two grid points are equally close, take the mean of the ld-parameters
+    if type(closestmodel) == np.ndarray:
+        return np.mean(d['e'][closestmodel]), np.mean(d['f'][closestmodel])
+    # If one grid point is the closest: 
+    else: 
+        return d['e'][closestmodel], d['f'][closestmodel]
+
 def u2q(u1, u2):
     '''
     Convert the linear and quadratic terms of the quadratic limb-darkening
