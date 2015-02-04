@@ -227,7 +227,7 @@ def logarithmic(*args):
     else: 
         return d['e'][closestmodel], d['f'][closestmodel]
 
-def u2q(u1, u2):
+def u2q(u1, u2, warnings=True):
     '''
     Convert the linear and quadratic terms of the quadratic limb-darkening
     parameterization -- called `u_1` and `u_2` in Kipping 2013 or `a` and `b` in 
@@ -251,6 +251,11 @@ def u2q(u1, u2):
     '''
     q1 = (u1 + u2)**2
     q2 = 0.5*u1/(u1+u2)
+    if warnings and (u1 < 0 or u2 < 0):
+        print "WARNING: The quadratic limb-darkening parameters " + \
+              "u1={0:.3f} or u2={0:.3f} violate Kipping's ".format(u1, u2) + \
+              "conditions for a monotonically increasing or everywhere-" +\
+              "positive intensity profile. Returning them as is."
     return q1, q2
     
 def q2u(q1, q2):
