@@ -5,11 +5,15 @@ Python interface for retrieving limb-darkening parameters from [Claret et al. 20
 ### Usage
 
 ```python
-#Get quadratic limb-darkening parameters for a star with effective temperature
-#5800 K and log g = 4.0, in the K band:
->>> from claretld import quad
+# Get quadratic limb-darkening parameters for a star with effective temperature
+# 5800 K and log g = 4.0, in the K band:
+>>> from claretld import quad, u2q
 >>> print quad(5800, 4.0, 'K')
 (0.13200000000000001, 0.183)
+
+## Convert the two quadratic parameters into Kipping 2013's q1 and q2 terms
+>>> print u2q(*quad(5800, 4.0, 'K'))
+(0.099225000000000008, 0.20952380952380953)
 ```
 
 ### Requirements

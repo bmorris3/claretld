@@ -23,6 +23,9 @@ UBVRIJHK, Sloan, and 2MASS photometric systems.
    <Astron. Astrophys. 552, A16 (2013)>
    =2013A&A...552A..16C
 
+http://adsabs.harvard.edu/abs/2013A%26A...552A..16C
+
+
 Available filters: 
    S3, S2, S1, S4, z', Kp, u', C, B, I, H, K, J, g', R, U, V, i', Ks, b, H2, 
    J2, r', u, v, y
@@ -199,3 +202,56 @@ def logarithmic(*args):
     '''
     closestmodel = getclosestmodel(*args)
     return d['e'][closestmodel], d['f'][closestmodel]
+    
+def u2q(u1, u2):
+    '''
+    Convert the linear and quadratic terms of the quadratic limb-darkening
+    parameterization -- called `u_1` and `u_2` in Kipping 2013 or `a` and `b` in 
+    Claret et al. 2013 -- and convert them to `q_1` and `q_2` as described in
+    Kipping 2013: 
+    
+    http://adsabs.harvard.edu/abs/2013MNRAS.435.2152K
+    
+    Parameters
+    ----------
+    u1 : float
+        Linear component of quadratic limb-darkening
+        
+    u2 : float
+        Quadratic component of quadratic limb-darkening    
+        
+    Returns
+    -------
+    (q1, q2) : tuple of floats
+        Kipping (2013) style quadratic limb-darkening parameters
+    '''
+    q1 = (u1 + u2)**2
+    q2 = 0.5*u1/(u1+u2)
+    return q1, q2
+    
+def q2u(q1, q2):
+    '''
+    Convert the two parameter quadratic terms of the Kipping 2013 limb-
+    darkening parameterization `q_1` and `q_2` to the standard linear and 
+    quadratic terms of the quadratic limb-darkening parameterization of
+    Claret et al. 2013 -- called `u_1` and `u_2` in Kipping 2013 or `a` and `b` in 
+    Claret et al. 2013:
+    
+    http://adsabs.harvard.edu/abs/2013A%26A...552A..16C
+    
+    Parameters
+    ----------
+    q1 : float
+        First component of Kipping 2013 quadratic limb-darkening
+        
+    q2 : float
+        Second component of Kipping 2013 quadratic limb-darkening   
+        
+    Returns
+    -------
+    (u1, u2) : tuple of floats
+        Claret et al. (2013) style quadratic limb-darkening parameters
+    '''
+    u1 = 2*np.sqrt(q1)*q2
+    u2 = np.sqrt(q1)*(1-2*q2)
+    return u1, u2
