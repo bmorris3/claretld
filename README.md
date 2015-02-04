@@ -29,3 +29,7 @@ Python interface for retrieving limb-darkening parameters from [Claret et al. 20
 ### Available filters
 
 Kepler, CoRoT, Spitzer (IRAC), uvby (Strömgren), UBVRIJHK (Johnson-Cousins), Sloan, and 2MASS.
+
+### Contact
+
+[Brett Morris](http://staff.washington.edu/bmmorris/): bmmorris@uw.edu
